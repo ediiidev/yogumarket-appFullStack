@@ -1,0 +1,29 @@
+name: yogumarket
+
+services:
+  postgres:
+    image: postgres:17
+    container_name: yogumarket-db-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: yogumarket_dev
+      POSTGRES_USER: yogumarket
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U yogumarket -d yogumarket_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+    external: true
+    name: database_postgres_data
